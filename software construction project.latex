@@ -1,0 +1,253 @@
+\newtoks\course
+\newtoks\assignment
+\newtoks\professor
+\newtoks\semester
+\newtoks\duedate
+\documentclass[14pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{vhistory}
+\usepackage{hyperref}
+
+%______________________________________________________________________________%
+\course{Software Engineering Management}
+\assignment{Final Project}
+\professor{Ahmad Tamrawi}
+\semester{Fall 2019/2020}
+\duedate{2019-11-2}
+%______________________________________________________________________________%
+
+
+%______________________________________________________________________________%
+\title{\the\course\\\the\assignment}
+\author{Tareq Kirresh(TK) : 1195221}
+\begin{document}
+\begin{figure}
+\centering
+  \includegraphics[width=7cm]{/home/tareq/Pictures/logos/birzeit-logo.png}
+\end{figure}
+\maketitle 
+\begin{center} 
+	Course Professor : \the\professor\\
+    Semester : \the\semester\\
+    Due Date : \the\duedate\\
+\end{center}
+\newpage
+%______________________________________________________________________________%
+
+
+%______________________________________________________________________________%
+\tableofcontents 
+\newpage 
+%______________________________________________________________________________%
+
+
+%______________________________________________________________________________%
+%\begin{versionhistory}  %uncomment for version history
+%\addcontentsline{toc}{section}{Version History}
+% \vhEntry{1.0}{5.11.17}{TK|MJ|AB}{Created.} % example Version Histroy entry
+%\end{versionhistory}
+%\newpage 
+%______________________________________________________________________________%
+
+
+%______________________________________________________________________________%
+
+
+\section{Part 1}
+\subsection{Overview and Justification}
+The Project chosen for this report is called JESSE, standing for "Java
+Enterprise Server Sent Events", an implementation of the SSE web standard
+for real time push events from a server to a subscribed client. I myself
+started this project about a year ago, due to the lack of context injection
+free framework for SSE, which was needed for database polling and handling 
+events from an event queue. The author is currently using it in some 
+projects for himself, and is working on a SAAS solution for real time
+communication based on it.\\
+
+This project was selected because it felt lacking in unit/integration tests,
+code quality, and documentation. While no new functionality was added,
+the code base was in bad shape and made the project difficult to use and 
+understand. Additionally, the project had a lack of serialization types
+which might have led to it not being as adopted as possible.
+One additional projects was considered, such as the 
+\href{https://github.com/openhab-scripters/openhab-helper-libraries}{openHab Scripters Project}, 
+but was seen as too niche of a need to invest time into, and is not 
+impactful beyond the project itself.\\
+
+The JESSE project lives on \href{https://github.com/TareqK/Jesse}{this GitHub repository},
+and is released under an Apache-2 License.\\
+\newpage
+\subsection{Building the Project}
+The project is a simple maven build, so building it did not require any
+special setups, simply a working maven installation. The author also 
+has a private CI/CD server, on which a new regular build and test job 
+was added. Aditionally, the build works on the Apache NetBeans IDE, since it also
+includes maven out of the box
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.6\paperwidth, height=0.25\paperheight]{./images/jenkins-build.png}
+   \caption{Jenkins Build}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.6\paperwidth, height=0.25\paperheight]{./images/netbeans-build.png}
+   \caption{NetBeans Build}
+\end{figure}
+\newpage
+\subsection{Tasks Description and Links}
+Overall, 10 tasks were chosen to be done,including code cleanups, 
+refactors, documentation, simplifaction, and testing.
+The follwing is a list of the tasks :
+\begin{itemize}
+	\item\href{https://github.com/TareqK/Jesse/issues/17}{Upgrade Jackson Version}
+	- the old Jackson serialization library used was found to have some security vulnrabilities
+	and needed to be upgraded
+	\item\href{https://github.com/TareqK/Jesse/issues/16}{Add Unit tests for base functionality}
+	- there were no tests at all for the project, other than developer manual testing. Some test 
+	functionality was needed.
+	\item\href{https://github.com/TareqK/Jesse/issues/15}{Implement an XML Mapper}
+	- there was a lack of serialization formats, as only JSON and Plain Test exist in the project
+	currently. SSE sometimes is used to transport entire parts of pages to render them
+	client-side, and to mesh with that use case, XML support was needed.
+	\item\href{https://github.com/TareqK/Jesse/issues/12}{Add checkstyle to project}
+	- Code style and JavaDoc enforcment was non-existent in the project and needed
+	to be added to make it easier to do expand the project, and keep everything well
+	documented.
+	\item\href{https://github.com/TareqK/Jesse/issues/34}{Add Unit test for keepalive/ping} 
+	- to test if session keepalive works
+	\item\href{https://github.com/TareqK/Jesse/issues/30}{Add a sessionId to the SseSession} 
+	- to make sessions easier to identify by the person using this library
+	\item\href{https://github.com/TareqK/Jesse/issues/21}{Allow changing the interval of keepalive at runtime}
+	- there was no way to change the keepalive interval after startup, which was needed to be adaptive to network
+	conditions
+	\item\href{https://github.com/TareqK/Jesse/issues/18}{Default Session Manager should be used when no other session manager is specified}
+	- a session manager for the conencted session had to be specified manually in the configuration, and the default one was not called automatically. 
+	this simplified configuration.
+
+\end{itemize}
+\subsection{Planning and Execution}
+\subsubsection{Approach}
+The author does not believe in estimation, and rather likes to rely on
+metrics, so no initial estimation was not done. However, a cadence
+was established,after solving a few varied issues and the following 
+service complexity table was created to be used.
+\subsubsection{Service Complexity Table}
+
+\begin{center}
+	\begin{tabular} {|c|c|c|c|}
+	\hline
+	Service/Compexity & Easy & Medium & Hard\\
+	\hline\hline
+	Serializer & 0.2 hours & --- & --- \\
+	Test  & 0.2 hours & 0.5 hours & --- \\
+	Deployment Configuration & 0.5 hours & --- & ---\\
+	Session Management & 1.0 hours & --- & --- \\
+	CI CD & --- & 0.5 hours & ---  \\
+	Refactoring and Infrastructure & 1.0 hours & 2.0 hours & 8.0 hours\\
+	\hline
+	\end{tabular}
+\end{center}
+\newpage
+\subsubsection{Task Complexity, Subtasks, and Service Types}
+\begin{itemize}
+\item Upgrade Jackson Version, Refactoring and Infrastructure, Easy
+\item Add Unit tests for Base Functionality
+	\begin{itemize}
+		\item Create base test and utils, Refactoring and Infrastructure, Hard
+		\item Add test for broadcast, Test, Medium
+		\item Add test for JSON Serialization, Test, Easy
+		\item Add JUnit Support in Jenkins Build, CI CD, Medium
+	\end{itemize}
+\item Implement an XML Mapper
+	\begin{itemize}
+		\item Implement and Add XML Mapper to mapper registery, Serializer, Easy
+		\item Add Unit Test for XML Mapper, Test, Easy
+	\end{itemize}
+\item Add Checkstyle to Project
+	\begin{itemize}
+		\item Add Checkstyle to Maven Build and configure rules, CI CD, Medium
+		\item Fix Style violations and errors, Refactoring and Infrastructure, Hard
+	\end{itemize}
+\item Add Unit test for keepalive/ping
+	\begin{itemize}
+		\item Add a way to capture events by type to test bench, Refactoring and Infrastructure, Medium
+		\item Add Unit test for ping, Test, Medium
+	\end{itemize}
+\item Add a sessionId to the SseSession, Session Management, Easy
+\item Allow changing the interval of keepalive at runtime
+	\begin{itemize}
+		\item clean up Servlet Class and startup parameter, Refacoting and Infrastructure, Easy
+		\item Add a Setter method to the SessionKeepAlive class and reference from inside servlet, Session Management, Medium
+	\end{itemize}
+\item Default Session Manager should be used when no other session manager is specified, Deployment Configuration, Easy
+\end{itemize}
+\newpage
+\subsubsection{Execution Plan}
+The author is only avaiable for 2 days a week, so over the period of 3 weeks, a total 
+of 6 days were allocated to this project, with a 7th day added in the second
+week due to a national holidy. The following gantt chart shows the order
+of execution for these issues
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.8\paperwidth]{./images/execution-gantt.png}
+   \caption{Execution Plan}
+\end{figure}
+\subsection{Risk Assesment}
+The only real risk in any task was the potenital to cause memory leaks
+due to the largely functional-style of programming used in this project. 
+Java is an Object-Oriented language, and using it in such a functional 
+matter, passing referenecs for an object to its inner classes then passing
+those on to executors or callback handlers may cause memory leaks. However,
+A debugging round was carried out with some stress and it was found that
+all sessions were cleared from memory. As a safeguard, a test was added
+(not related to an issue), that opened a large ammount of sessions and 
+closed them, checking if the references to them were also removed correctly.
+\newpage
+\subsection{Initial Development Process Plan}
+The process of development is largely based on the standard FOSS community
+branching procedures, where each issue has its branch named after the issue,
+the work is done on that branch, and then merged to a development branch. 
+After a stable state was reached, a release is created and merged into the
+master branch of the repository.
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.8\paperwidth]{./images/pull-request.png}
+   \caption{Development Process}
+\end{figure}
+\subsection{Tasks Scope Justification}
+These tasks were chosen because they were varied in their nature and 
+required the application of a lot of clean code and best practice knowledge.
+While the core functionality was working previously, the code base was
+in a bad state, and evolution was not possible, as
+\begin{itemize}
+	\item There was no documentation of the code
+	\item There was no documentation of the useage
+	\item The code followed unclear logical paths
+	\item There was no testing
+\end{itemize}
+
+The tasks were chosen to mitigate this issue, and to transform the 
+library into a more useable component for project's outside the 
+author's own.
+
+The tasks contained a heavy ammount of refactoring, and most of the 
+tasks focused on increasing quality over features. 
+
+%______________________________________________________________________________%
+
+
+%______________________________________________________________________________%
+%\newpage 
+%\begin{thebibliography}{9} % uncomment for biblography
+%\addcontentsline{toc}{section}{References}
+%\bibitem{predictiveTaxi} % example biblography entry
+%Satish Kumar Verma, Hoang Tam Vo,
+%\textit{A Predictive Taxi Dispatching System for Improved User
+%Satisfaction and Taxi Utilization, SAP Innovation Center, Singapore, 2015.}
+%\end{thebibliography}
+%______________________________________________________________________________%
+\end{document}
