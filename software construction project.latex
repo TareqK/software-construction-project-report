@@ -13,7 +13,7 @@
 %______________________________________________________________________________%
 \course{Software Engineering Management}
 \assignment{Final Project}
-\professor{Ahmad Tamrawi}
+\professor{Ahmed Tamrawi}
 \semester{Fall 2019/2020}
 \duedate{2019-11-2}
 %______________________________________________________________________________%
@@ -29,7 +29,7 @@
 \end{figure}
 \maketitle 
 \begin{center} 
-	Course Professor : \the\professor\\
+	Course Professor : Dr. \the\professor\\
     Semester : \the\semester\\
     Due Date : \the\duedate\\
 \end{center}
