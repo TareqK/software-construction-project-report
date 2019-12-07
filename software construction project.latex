@@ -318,7 +318,7 @@ finding any class simply uses the default session manager.
 \end{itemize}
 \newpage
 \subsection{Submitted Artifacts}
-A list of the issues solved can be found \href{ https://github.com/TareqK/Jesse/issues?q=is\%3Aissue+is\%3Aclosed }{Here},
+A list of the issues solved can be found \href{https://github.com/TareqK/Jesse/issues?q=is\%3Aissue+is\%3Aclosed }{Here},
 additionally, the library itself is on maven central \href{https://search.maven.org/artifact/me.kisoft/jesse/1.0/jar}{Here} 
 \subsection{QA Strategy}
 The main QA Strategies used where static code analysis via checkstyle and unit tests via JUnit. Any functionality added had to have
@@ -329,7 +329,7 @@ no need to do any further testing. Any issues that might arise will show up in p
 working as it should be.
 \subsection{QA Evidence}
 The source code for tests can be found \href{https://github.com/TareqK/Jesse/tree/develop/src/test/java/me/kisoft/jesse/test}{Here},
-and the checkstyle.xml file used for rules can be found \href{Checkstyle file : https://github.com/TareqK/Jesse/blob/develop/checkstyle.xml }{Here},
+and the checkstyle.xml file used for rules can be found \href{https://github.com/TareqK/Jesse/blob/develop/checkstyle.xml}{Here},
 additionally, the jenkins reports produced can give us percise results on what is failing and when and how
 \begin{figure}[h]
 \centering
