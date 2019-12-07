@@ -236,7 +236,122 @@ author's own.
 
 The tasks contained a heavy ammount of refactoring, and most of the 
 tasks focused on increasing quality over features. 
+\newpage
+\section{Part 2}
+\subsection{Project Context and Business Model}
+This project came about when I was implemnting a real time tracking 
+application at scale. The idea was that I needed to either poll the database
+or receive events from an event queue, and I needed to push them to a client.
+The problems with existing solutions where that they all relied on the 
+event sink being in the same context as the request, meaning it was 
+difficult to send events in a clean way without either manually taking 
+the context and injecting it into any event queue handlers/ polling threads, 
+or placing the event handlers/polling threads somewhere in the service
+class. Neither of these were desirable, and I had previously worked on a
+simplified application of this kind of real time communication in my 
+bachelors graduation project, except using web sockets instead of Server
+Sent Events. Therefore, I wanted to create an flexible library that allows
+me to use Server Sent Events outside of a context, and at the same time,
+I wanted it to mesh with the Java Enterprise style of coding, where
+most things are injected at runtime.
+\newpage
+\subsection{Task Descriptions}
 
+\begin{itemize}
+\item Upgrade Jackson Version : This task only required me to change the pom.xml file to
+use a more recent version of the library. the APIs and behaviours had not changed,
+so there was no need to re-write any code
+\item Add Unit tests for Base Functionality
+	\begin{itemize}
+		\item Create base test and utils: I needed to create a  base layer for testing that allowed me
+		to act as a client and a server at the same time in order to send and catch requests. While this
+		is not exactly a unit test, it is still run with JUnit, and so works fine for now.
+		\item Add test for broadcast : After the creation of the base layer, I created the basic test that senta
+		out a request with a certain ID and received it and checked that all its contents were sent and received correctly.
+		Since the baselayer allowed me to do this, this turned out easier than expected
+		\item Add test for JSON Serialization : I created a test that sent out an event with a certain ID and gave it an 
+		object to serialize. I caught that event, and checked if the serialized object in JSON has the same values as the
+		object I sent
+		\item Add JUnit Support in Jenkins Build : For this, I had to install the JUnit plugin and enable it for the project,
+		and i had to reference the name of the junit report file in order to build result trends
+	\end{itemize}
+\item Implement an XML Mapper
+	\begin{itemize}
+		\item Implement and Add XML Mapper to mapper registery : For this, I simply needed to implement the MapperFeature interface
+		and specify that this mapper feature implements XML. I used Jackson as well for this mapper, which takes Java objects and 
+		maps them into XML
+		\item Add Unit Test for XML Mapper : A Unit test was added that sent an event with a certain ID and gave it an object to 
+		serialize. I Caught that event, and checked if the serialized object in XML has the same values as the object i sent
+	\end{itemize}
+\item Add Checkstyle to Project
+	\begin{itemize}
+		\item Add Checkstyle to Maven Build and configure rules : This required a change in the pom.xml file to add the checkstyle plugin,
+		and the addition of a checkstyle.xml file specifiying the rules that will be enforced. The setup of the plugin meant that the
+		project will not compile if documentation is lacking in the source files or if there are style violations. This greatly
+		increases code quality and consistency
+		\item Fix Style violations and errors : Since the code was written around 10 months ago, it was written when I was less experienced
+		in clean code and style. As such, the code came up with around 300 style violations(including documentation violations) that needed
+		to be repaired. This was not a huge issue, as most of the style violations where centered around variable names, spacing, braces,
+		and javadoc
+	\end{itemize}
+\item Add Unit test for keepalive/ping
+	\begin{itemize}
+		\item Add a way to capture events by type to test bench : The test bench, when i first designed it(before taking on this issue), only
+		caught events by ID. This needed an upgrade, and I had to start catching events by name(or type). This was not a difficult enhancement,
+		as the same code was simply reused while looking for different properties in the event.
+		\item Add Unit test for ping : I used the methods I wrote above to check that a ping signal is sent regularly. Not much was done
+		in terms of code
+	\end{itemize}
+\item Add a sessionId to the SseSession : I added a property to the SseSession class that specifies a unique ID, and used the session manager
+to generate the session Id via UUID by default. This can be overwridden, In case a session manager wants to reflect the location/user account/other property
+in the session Id
+\item Allow changing the interval of keepalive at runtime
+	\begin{itemize}
+		\item clean up Servlet Class and startup parameter : The start up parameter scanning logic was too complex, and needed to be simplified
+		to work correctly. This was done by assinging default values and removing rendundant If statements
+		\item Add a Setter method to the SessionKeepAlive class and reference from inside servlet : The SessionKeepAlive class's schedueling mechanism
+		was changed. Instead of relying on the thread pool to re-scheduele by itself, the thread itself called a method that reschedueled it,
+		taking the new value of the keepalive as read from the session manager. Additionally, the interval can be changed from anywhere inside the application now
+	\end{itemize}
+\item Default Session Manager should be used when no other session manager is specified : The logic that is used to find the session manager class was simplified, and not
+finding any class simply uses the default session manager.
+\end{itemize}
+\newpage
+\subsection{Submitted Artifacts}
+A list of the issues solved can be found \href{ https://github.com/TareqK/Jesse/issues?q=is\%3Aissue+is\%3Aclosed }{Here},
+additionally, the library itself is on maven central \href{https://search.maven.org/artifact/me.kisoft/jesse/1.0/jar}{Here} 
+\subsection{QA Strategy}
+The main QA Strategies used where static code analysis via checkstyle and unit tests via JUnit. Any functionality added had to have
+its unit tests added and succeed, and any code added had to comply with coding standards otherwise it would not compile in the first place.
+While this might not seem a lot, there is no UI/Interaction, and as such, there is no need for any more testing. Additionally, after 
+all the issues were implemented, a profiling run was done to make sure no memory leaks were incurred, and with that done, there was 
+no need to do any further testing. Any issues that might arise will show up in production, but as far as software shipped, everything is
+working as it should be.
+\subsection{QA Evidence}
+The source code for tests can be found \href{https://github.com/TareqK/Jesse/tree/develop/src/test/java/me/kisoft/jesse/test}{Here},
+and the checkstyle.xml file used for rules can be found \href{Checkstyle file : https://github.com/TareqK/Jesse/blob/develop/checkstyle.xml }{Here},
+additionally, the jenkins reports produced can give us percise results on what is failing and when and how
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.8\paperwidth]{./images/test-trends.png}
+   \caption{Unit testing Trends}
+\end{figure}
+\newpage
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.8\paperwidth]{./images/failing-tests.png}
+   \caption{Failed Test Reports}
+\end{figure}
+\newpage
+\subsection{Plan Updates}
+Fortunately, due to a deep understanding of the code(since I wrote it initially), experience in real time systems,
+and general practice, the only changes to the plan were those concerning the unit tests. There was a problem at first
+with unit tests failing due to race conditions, which only happened in the CI/CD environment and not on local builds.
+After some tracing, it was found that the initial implementation used was causing these problems, as it was not 
+using promises in a correct way, Event Sources were not being closed once the tests concerning them were done,
+and a problem arose with flushing which was cleared by tuning the server parameters(this would not hapen in a prodution setup,
+since the server will automatically flush a completed request in that case to clear threads). These issues took around 8 more man 
+hours to solve, but where still reasonably within the limits of the original estimation.
 %______________________________________________________________________________%
 
 
