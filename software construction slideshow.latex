@@ -1,0 +1,193 @@
+\newtoks\course
+\newtoks\assignment
+\newtoks\professor
+\newtoks\semester
+\newtoks\duedate
+\documentclass{beamer}
+\usetheme{Singapore}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{vhistory}
+ 
+
+%______________________________________________________________________________%
+\course{Software Construction}
+\assignment{Reflections on Open Source Journey : Contributing to JeSSE}
+\professor{Ahmed Tamrawi}
+\semester{Fall 2019/2020}
+
+%______________________________________________________________________________%
+
+
+%______________________________________________________________________________%
+\title{\the\assignment}
+\subtitle{Course Professor : Dr. \the\professor\\}
+\author{Tareq Kirresh(TK) : 1195221}
+\begin{document}
+\begin{frame}
+\begin{figure}
+\centering
+  \includegraphics[width=3cm]{./images/birzeit-logo.png}
+\end{figure}
+\maketitle 
+\begin{center} 
+Course : \the\course\\
+Semester : \the\semester\\
+\end{center}
+\end{frame}
+
+\section{About the Project}
+\begin{frame}
+\frametitle{About the Project}
+\begin{itemize}
+  \item Begun the project in december 2018
+  \item Started off as an experiment in real time communication
+  \item Goal was to try and implement a web standard and have a deeper understanding of specification
+  \item Found use for it later in a real time GIS application
+  \item development was frozen two months later, because the commerical project behind it was dropped
+  \item Lives on https://github.com/TareqK/Jesse
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Main Features}
+\begin{itemize}
+ \item Extensible Session manager, with the ability to provide any sort of mapping between sessions and data
+ \item Extensible Serializers, with the ability to serialize in any JAX-RS compatible format
+ \item Session Life Cycle
+ \item No running dependency on CDI(important - initial goal was to poll database)
+\end{itemize}
+\end{frame}
+
+\section{Explenation of SSE}
+\begin{frame}
+\frametitle{Background}
+\begin{itemize}
+  \item Sometimes Data needs to be pushed from the server to the client
+  \item We work in browsers, so its not possible to implement our own custom sockets all the time
+  \item Some browsers dont support WebSocket standards
+  \item Polling servers takes too much data
+  \item Long Polling is Ad-Hoc
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{SSE Features}
+\begin{itemize}
+  \item Allows us to maintain a one-way connection with the server
+  \item No protocol change or upgrade; still using HTTP
+  \item Plain Text format, flexible for data transfer
+  \item Supported by Major Browsers via the EventSource API
+  \item Maintained in the HTML Living Standard
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Protocol}
+\begin{figure}
+\centering
+  \includegraphics[width=10cm]{./images/sse.png}
+\end{figure}
+\end{frame}
+
+\section{Work Done}
+\begin{frame}
+\frametitle{Description of Tasks}
+\begin{itemize}
+\item Upgrade Jackson Version - the old Jackson serialization library used was found to have some security
+vulnrabilities and needed to be upgraded
+\item Add Unit tests for base functionality - there were no tests at all for the project, other than developer
+manual testing. Some test functionality was needed.
+\item Implement an XML Mapper - there was a lack of serialization formats, as only JSON and Plain Test
+exist in the project currently. SSE sometimes is used to transport entire parts of pages to render them
+client-side, and to mesh with that use case, XML support was needed.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Description of Tasks}
+\begin{itemize}
+\item Add checkstyle to project - Code style and JavaDoc enforcment was non-existent in the project and
+needed to be added to make it easier to do expand the project, and keep everything well documented.
+\item Add Unit test for keepalive/ping - to test if session keepalive works
+\item Add a sessionId to the SseSession - to make sessions easier to identify by the person using this library
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Description of Tasks}
+\begin{itemize}
+\item Allow changing the interval of keepalive at runtime - there was no way to change the keepalive interval
+after startup, which was needed to be adaptive to network conditions
+\item Default Session Manager should be used when no other session manager is specified - a session manager
+for the conencted session had to be specified manually in the configuration, and the default one was
+not called automatically. this simplified configuration.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{CI/CD Setup}
+\begin{itemize}
+   \item Jenkins Job setup to compile and run unit tests
+   \item In addition, deployment to maven central is now possible
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Jenkins Build Job}
+\centering
+https://jenkins.kisoft.me/job/Jesse/
+\end{frame}
+
+\begin{frame}
+\frametitle{Maven Central}
+\centering
+https://search.maven.org/artifact/me.kisoft/jesse/1.0/jar
+\end{frame}
+
+\section{Results}
+
+\begin{frame}
+\frametitle{Code Quality}
+\begin{itemize}
+  \item Code was cleaned up and made more loosely coupled
+  \item Code quality, in terms of naming and structure, increased due to stricted enforcement
+  \item Documentation was more comprehensive, due to forced documentation
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Quality Assurance}
+\begin{itemize}
+  \item Integration tests for all features mean that less manual testing is needed
+  \item Clear documentation and tracability means that bugs and leaks are easier to find
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Code Management}
+\begin{itemize}
+  \item Jenkins Introduced for CI/CD means that builds are consistent and signed
+  \item Unit Tests are now forced with each build, increasing standards for testing
+  \item Checkstyle style enforcement was added, meaning that poor quality and undocumented code will no longer compile
+  \item Build problems are clearly highlighted and tied to specific commits, increasing accountability
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Community}
+\begin{itemize}
+  \item Library now on Maven Central, making it accessible to all audiences
+  \item Extensive documentation now makes contribuitng to and using the library easier
+\end{itemize}
+\end{frame}
+
+\section{End Card}
+\begin{frame}
+\begin{center}\Huge\bfseries\itshape
+Questions ?
+\end{center}
+\end{frame}
+\end{document}
+
