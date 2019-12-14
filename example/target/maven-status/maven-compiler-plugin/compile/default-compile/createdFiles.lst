@@ -1,0 +1,4 @@
+me/kisoft/chat/entity/ChatMessage.class
+me/kisoft/chat/endpoint/CorsFilter.class
+me/kisoft/chat/run/Initialization.class
+me/kisoft/chat/endpoint/ChatEndpoint.class

@@ -37,6 +37,18 @@ Semester : \the\semester\\
 \end{frame}
 
 \section{About the Project}
+
+\begin{frame}
+\frametitle{Main Features}
+\begin{itemize}
+ \item Implementation of Server Sent Events standards in Java
+ \item Extensible Session manager, with the ability to provide any sort of mapping between sessions and data
+ \item Extensible Serializers, with the ability to serialize in any JAX-RS compatible format
+ \item Session Life Cycle
+ \item No running dependency on CDI(important - initial goal was to poll database)
+\end{itemize}
+\end{frame}
+
 \begin{frame}
 \frametitle{About the Project}
 \begin{itemize}
@@ -49,15 +61,7 @@ Semester : \the\semester\\
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Main Features}
-\begin{itemize}
- \item Extensible Session manager, with the ability to provide any sort of mapping between sessions and data
- \item Extensible Serializers, with the ability to serialize in any JAX-RS compatible format
- \item Session Life Cycle
- \item No running dependency on CDI(important - initial goal was to poll database)
-\end{itemize}
-\end{frame}
+
 
 \section{Explenation of SSE}
 \begin{frame}
@@ -145,6 +149,32 @@ https://jenkins.kisoft.me/job/Jesse/
 \centering
 https://search.maven.org/artifact/me.kisoft/jesse/1.0/jar
 \end{frame}
+
+
+\section{Process}
+\begin{frame}
+\frametitle{Contribution Process}
+\begin{itemize}
+  \item Create Branch with name containing issue number
+  \item Do your work on branch
+  \item Create pull request for branch
+  \item If approved, branch is merged
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Contribution Process}
+\centering
+  \includegraphics[width=10cm]{./images/pull-request.png}
+\end{frame}
+
+\section{Demo}
+\begin{frame}
+\begin{center}\Huge\bfseries\itshape
+Demo Time!
+\end{center}
+\end{frame}
+
 
 \section{Results}
 
